@@ -79,7 +79,7 @@ void addUser() {
         return;
     }
 
-    /* Check for duplicate ID (only open for reading if file exists) */
+  
     fp = safeOpenFile(USER_FILE, "r");
     if (fp != NULL) {
         while (fscanf(fp, "%d,%99[^,],%d\n", &existing.id, existing.name, &existing.age) == 3) {
@@ -96,9 +96,9 @@ void addUser() {
         return;
     }
     printf("Enter the user's full name: ");
-    while (getchar() != '\n'); /* clear leftover newline from previous scanf */
+    while (getchar() != '\n'); 
     fgets(newUser.name, sizeof(newUser.name), stdin);
-    newUser.name[strcspn(newUser.name, "\n")] = '\0'; /* remove trailing newline */
+    newUser.name[strcspn(newUser.name, "\n")] = '\0'; 
 
     printf("Enter the user's age (numeric): ");
     if (scanf("%d", &newUser.age) != 1) {
@@ -107,7 +107,6 @@ void addUser() {
         return;
     }
 
-    /* Append the new user to file */
     fp = safeOpenFile(USER_FILE, "a");
     if (fp == NULL) {
         printf("Failed to save the new user.\n");
@@ -133,7 +132,7 @@ void listUsers() {
 
     printf("\n--- All Users ---\n");
     printf("%-5s | %-30s | %-5s\n", "ID", "Name", "Age");
-    printf("-----------------------------------------------\n");
+
 
     while (fscanf(fp, "%d,%99[^,],%d\n", &u.id, u.name, &u.age) == 3) {
         printf("%-5d | %-30s | %-5d\n", u.id, u.name, u.age);
@@ -179,7 +178,7 @@ void editUser() {
             printf("\nUser found (ID %d). Enter new values.\n", targetId);
 
             printf("New name: ");
-            while (getchar() != '\n'); /* clear newline */
+            while (getchar() != '\n');
             fgets(u.name, sizeof(u.name), stdin);
             u.name[strcspn(u.name, "\n")] = '\0';
 
@@ -252,5 +251,6 @@ void removeUser() {
         printf("No user with ID %d was found.\n", targetId);
     }
 }
+
 
 
