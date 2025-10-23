@@ -23,6 +23,7 @@ char calculate_grade(int total_marks) {
 }
 
 
+
 void print_grade_description(char grade) {
     switch (grade) {
         case 'A':
@@ -39,6 +40,28 @@ void print_grade_description(char grade) {
             break;
         default: // Handles 'F' and any other case.
             puts("Grade: F — Fail");
+            break;
+    }
+}
+void printstars(char grade) {
+    switch (grade) {
+        case 'A':
+            printf("*****\n");
+            break;
+        case 'B':
+            printf("****\n");
+            break;
+        case 'C':
+            printf("***\n");
+            break;
+        case 'D':
+            printf("**\n");
+            break;
+        case 'F':
+            printf("\n"); 
+            break;
+        default:
+            printf("\n");
             break;
     }
 }
@@ -102,8 +125,9 @@ int main(void) {
         printf("Marks: %d %d %d\n", students[i].marks[0], students[i].marks[1], students[i].marks[2]);
         printf("Total: %d\n", students[i].total_marks);
         print_grade_description(students[i].grade);
-        
+        printstars(students[i].grade);
     }
 
     return 0;
 }
+
