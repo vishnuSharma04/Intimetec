@@ -50,9 +50,7 @@ int main() {
 void fill(int n, int*** arr) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            int* value = (int*)malloc(sizeof(int));
-            *value = rand() % 256;
-            *(*(arr + i) + j) = value;
+            *(*(arr + i) + j) = rand() % 256;
         }
     }
 }
@@ -110,4 +108,5 @@ void smooth(int n, int*** arr) {
             *(*(*(arr + i) + j)) /= 1000;
         }
     }
+
 }
