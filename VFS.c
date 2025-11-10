@@ -215,15 +215,7 @@ void writeFile(const char* name, const char* line) {
             buf[len] = 0;
             text = buf;
         }
-    } else {
-        const char* p = line;
-        while (*p && *p != ' ') p++;
-        while (*p == ' ') p++;
-        while (*p && *p != ' ') p++;
-        while (*p == ' ') p++;
-        text = p;
-    }
-
+    } 
     int len = strlen(text);
     freeFileBlocks(f);
     if (len == 0) { printf("Written 0 bytes\n"); return; }
