@@ -1,0 +1,153 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_KEY_SPACE 100 
+typedef struct Node {
+    int key;               
+    char* value;            
+    struct Node* next;     
+    struct Node* prev;      
+} Node;
+
+
+Node* head = NULL;          
+Node* tail = NULL;          
+Node* hashArray[MAX_KEY_SPACE]; 
+
+int maxCapacity = 0;        
+int currentSize = 0;       
+
+
+Node* createNode(int key, char* value) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->key = key;
+    
+    newNode->value = strdup(value); 
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void addToHead(Node* node) {
+    if (head == NULL) {
+        head = node;
+        tail = node;
+    } else {
+        node->next = head;
+        head->prev = node;
+        head = node;
+    }
+}
+
+
+void removeNode(Node* node) {
+    if (node->prev != NULL) {
+        node->prev->next = node->next;
+    } else {
+      
+        head = node->next;
+    }
+
+    if (node->next != NULL) {
+        node->next->prev = node->prev;
+    } else {
+        
+        tail = node->prev;
+    }
+    
+
+    node->next = NULL;
+    node->prev = NULL;
+}
+
+
+void createCache(int capacity) {
+    maxCapacity = capacity;
+    currentSize = 0;
+    head = NULL;
+    tail = NULL;
+    
+
+    for(int i = 0; i < MAX_KEY_SPACE; i++) {
+        hashArray[i] = NULL;
+    }
+}
+
+char* get(int key) {
+    // 1. Check Hash Map - O(1)
+    if (hashArray[key] == NULL) {
+        return NULL;
+    }
+
+
+    Node* node = hashArray[key];
+    
+    removeNode(node);
+    addToHead(node);
+
+    return node->value;
+}
+
+
+void put(int key, char* value) {
+
+    if (hashArray[key] != NULL) {
+        Node* node = hashArray[key];
+        
+
+        free(node->value);
+        node->value = strdup(value);
+        
+        removeNode(node);
+        addToHead(node);
+        return;
+    }
+
+
+    if (currentSize == maxCapacity) {
+
+        Node* lru = tail;
+        hashArray[lru->key] = NULL;
+        removeNode(lru);
+        free(lru->value);
+        free(lru);
+        currentSize--;
+    }
+
+   
+    Node* newNode = createNode(key, value);
+    addToHead(newNode);
+    hashArray[key] = newNode;
+    currentSize++;
+}
+int main() {
+    char command[20];
+    int n, key;
+    char value[100]; 
+
+
+    while (scanf("%s", command) != EOF) {
+        if (strcmp(command, "exit") == 0) {
+            break;
+        } 
+        else if (strcmp(command, "createCache") == 0) {
+            scanf("%d", &n);
+            createCache(n);
+        } 
+        else if (strcmp(command, "put") == 0) {
+            scanf("%d %s", &key, value);
+            put(key, value);
+        } 
+        else if (strcmp(command, "get") == 0) {
+            scanf("%d", &key);
+            char* result = get(key);
+            if (result == NULL) {
+                printf("NULL\n"); 
+            } else {
+                printf("%s\n", result);
+            }
+        }
+    }
+    return 0;
+}
